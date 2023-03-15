@@ -47,32 +47,25 @@ try:
 except URLError as e:
   streamlit.error() # I think streamlit.error(e) would also get the same result (not sure)
   
+streamlit.header("The fruit load list contains:")
+# Snowflake-related functions
+def get_fruit_load_list():
+  with my_cnx.cursor() as my_cur:
+    my_cur.execute("SELECT * from fruit_load_list")
+    return my_cur.fetchall()
+  
+ # Add a button to load the fruit
+if streamlit.button('Get Fruit Load List'):
+  my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+  my_data_rows = get_fruit_load_list()
+  streamlit.dataframe(my_data_rows)
+    
 # Do not run anything past here while we troubleshoot
 streamlit.stop()
-
-# Added code lines to query Our Trial Account Metadata 
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-my_cur = my_cnx.cursor()
-# my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
-
-# Query the data on snowflake table connected
-my_cur.execute("SELECT * from fruit_load_list")
-# my_data_row = my_cur.fetchone()
-# code line to display all the lines
-my_data_rows = my_cur.fetchall()
-# streamlit.text("Hello from Snowflake:")
-# streamlit.text("The fruit load list contains:")
-# streamlit.text(my_data_row)
-
-# Change the Streamlit Components to Make Things Look a Little Nicer
-streamlit.header("The fruit load list contains:")
-# streamlit.dataframe(my_data_row)
-streamlit.dataframe(my_data_rows)
 
 # Add a Second Text Entry Box
 add_my_fruit = streamlit.text_input('What fruit would you like to add?','jackfruit')
 streamlit.write('Thanks for adding ', add_my_fruit)
-
 
 # Control of flow test 
 # This will not work correctly, but just go with it for now
