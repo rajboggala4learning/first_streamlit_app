@@ -26,7 +26,8 @@ streamlit.dataframe(fruits_to_show)
 streamlit.header("Fruityvice Fruit Advice!")
 
 import requests
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+# fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+fruityvice_response = requests.get("https://fruityvice.com/api/fruit/"+"kiwi")
 #streamlit.text(fruityvice_response.json()) # just writed the data to the screen - json as string to display
 
 # use pandas package to normalize/flatten/parse the json data for fitting it into a dataframe/tabular form
