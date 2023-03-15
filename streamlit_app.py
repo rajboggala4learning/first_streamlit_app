@@ -16,7 +16,7 @@ streamlit.text('🥑🍞 Avocado Toast')
 streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')
 
 
-my_fruit_list = pd.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txv")
+my_fruit_list = pd.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txt")
 my_fruit_list = my_fruit_list.set_index('Fruit')
 
 # Let's put a pick list here so they can pick the fruit they want to include 
@@ -38,7 +38,7 @@ try:
     fruityvice_normalized = pd.json_normalize(fruityvice_response.json()) # use pandas package to normalize/flatten/parse the json data for fitting it into a dataframe/tabular form
     streamlit.dataframe(fruityvice_normalized) # Display the fruityvice table on the page
 except URLError as e:
-  streamlit.error(e)
+  streamlit.error() # I think streamlit.error(e) would also get the same result (not sure)
   
 # Do not run anything past here while we troubleshoot
 streamlit.stop()
