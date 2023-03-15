@@ -1,5 +1,5 @@
 import streamlit
-import pandas
+import pandas as pd
 import requests
 import snowflake.connector
 from urllib.error import URLError
@@ -15,7 +15,7 @@ streamlit.text('🥑🍞 Avocado Toast')
 
 streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')
 
-# import pandas
+
 my_fruit_list = pandas.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txt")
 my_fruit_list = my_fruit_list.set_index('Fruit')
 
@@ -29,34 +29,19 @@ streamlit.dataframe(fruits_to_show)
 
 # New section to display fruityvice api response
 streamlit.header("Fruityvice Fruit Advice!")
-
-# Add a Text Entry Box and Send the Input to Fruityvice as Part of the API Call
-# fruit_choice = streamlit.text_input('What fruit would you like information about?','Kiwi')
-
-# Test the code with 'Apple'
-fruit_choice = streamlit.text_input('What fruit would you like information about?','Apple')
-streamlit.write('The user entered ', fruit_choice)
-
-# import requests
-# fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
-
-# use the 'fruit_choice' variable to pass instead of hardcoding the value as 'Kiwi'
-# fruityvice_response = requests.get("https://fruityvice.com/api/fruit/"+"kiwi")
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/"+fruit_choice)
-
-#streamlit.text(fruityvice_response.json()) # just writed the data to the screen - json as string to display
-
-# use pandas package to normalize/flatten/parse the json data for fitting it into a dataframe/tabular form
-fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
-
-#  Display the fruityvice table on the page
-streamlit.dataframe(fruityvice_normalized)
-
+try:
+  fruit_choice = streamlit.text_input('What fruit would you like information about?')
+  if not fruit_choice:
+    streamlit.error('Please select a fruit to get information.')
+  else:
+    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/"+fruit_choice)
+    fruityvice_normalized = pd.json_normalize(fruityvice_response.json()) # use pandas package to normalize/flatten/parse the json data for fitting it into a dataframe/tabular form
+    streamlit.dataframe(fruityvice_normalized) # Display the fruityvice table on the page
+except URLError as e:
+  streamlit.error()
+  
 # Do not run anything past here while we troubleshoot
 streamlit.stop()
-
-# Added code line to import snowflake python connector package or library
-# import snowflake.connector
 
 # Added code lines to query Our Trial Account Metadata 
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
