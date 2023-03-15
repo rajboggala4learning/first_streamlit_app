@@ -47,6 +47,9 @@ fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
 #  Display the fruityvice table on the page
 streamlit.dataframe(fruityvice_normalized)
 
+# Do not run anything past here while we troubleshoot
+streamlit.stop()
+
 # Added code line to import snowflake python connector package or library
 import snowflake.connector
 
